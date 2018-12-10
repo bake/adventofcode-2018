@@ -1,4 +1,4 @@
-package main
+package grid
 
 import (
 	"fmt"
@@ -20,29 +20,29 @@ const (
 	fieldEqualDist = -1
 )
 
-type grid struct {
-	points map[xy]int // points are the base coordinates.
-	locs   map[xy]int // locs are all fields.
+type Grid struct {
+	points map[XY]int // points are the base coordinates.
+	locs   map[XY]int // locs are all fields.
 }
 
-func newGrid() grid {
-	return grid{map[xy]int{}, map[xy]int{}}
+func New() Grid {
+	return Grid{map[XY]int{}, map[XY]int{}}
 }
 
-func (g grid) at(p xy) int {
+func (g Grid) At(p XY) int {
 	return g.locs[p]
 }
 
-// setPoint sets a point and a location, regardless of its prevous values.
-func (g grid) setPoint(p xy, id int) {
+// SetPoint sets a point and a location, regardless of its prevous values.
+func (g Grid) SetPoint(p XY, id int) {
 	g.points[p] = id
 	g.locs[p] = id
 }
 
-// set saves a points id to a location. If the position is already occupied, it
+// Set saves a points id to a location. If the position is already occupied, it
 // sets it to fieldEqualDist. This is only useful, if the grid contains only
 // locations that are created within the same iteration.
-func (g grid) set(p xy, id int) {
+func (g Grid) Set(p XY, id int) {
 	if g.locs[p] == fieldEmpty {
 		g.locs[p] = id
 	}
@@ -51,18 +51,18 @@ func (g grid) set(p xy, id int) {
 	}
 }
 
-// expend expends the points by a given radius using manhattan distance. This
+// Expand expends the points by a given radius using manhattan distance. This
 // way there is no need to iterate over all w*h pixels on every iteration. It
 // creates a new grid that contains only the new (expanded) fields.
-func (g grid) expand(radius int) {
-	h := newGrid()
+func (g Grid) Expand(radius int) {
+	h := New()
 	for p, id := range g.points {
 		for x := 0; x < radius; x++ {
 			y := radius - x - 1
-			h.set(xy{p.x() - x, p.y() - y}, id)
-			h.set(xy{p.x() - x, p.y() + y}, id)
-			h.set(xy{p.x() + x, p.y() - y}, id)
-			h.set(xy{p.x() + x, p.y() + y}, id)
+			h.Set(XY{p.X() - x, p.Y() - y}, id)
+			h.Set(XY{p.X() - x, p.Y() + y}, id)
+			h.Set(XY{p.X() + x, p.Y() - y}, id)
+			h.Set(XY{p.X() + x, p.Y() + y}, id)
 		}
 	}
 	for p, id := range h.locs {
@@ -72,11 +72,11 @@ func (g grid) expand(radius int) {
 	}
 }
 
-// print prints the grid to the console. use image() for larger systems.
-func (g grid) print(b image.Rectangle) {
+// Print prints the grid to the console. use image() for larger systems.
+func (g Grid) Print(b image.Rectangle) {
 	for y := b.Min.Y; y < b.Max.Y; y++ {
 		for x := b.Min.X; x < b.Max.X; x++ {
-			id := g.locs[xy{x, y}]
+			id := g.locs[XY{x, y}]
 			switch id {
 			case fieldEmpty:
 				fmt.Print("  ")
@@ -84,7 +84,7 @@ func (g grid) print(b image.Rectangle) {
 				fmt.Print("..")
 			default:
 				i := 97
-				if g.points[xy{x, y}] == id {
+				if g.points[XY{x, y}] == id {
 					i = 65
 				}
 				fmt.Printf("%c ", i+id-1)
@@ -94,25 +94,25 @@ func (g grid) print(b image.Rectangle) {
 	}
 }
 
-// image generates an image drawing the grid.
-func (g grid) image(b image.Rectangle) image.Image {
+// Image generates an image drawing the grid.
+func (g Grid) Image(b image.Rectangle) image.Image {
 	img := image.NewRGBA(b)
 	for p, id := range g.locs {
 		switch id {
 		case fieldEqualDist:
-			img.Set(p.x(), p.y(), color.RGBA{0, 0, 0, 255})
+			img.Set(p.X(), p.Y(), color.RGBA{0, 0, 0, 255})
 		default:
-			img.Set(p.x(), p.y(), palette.WebSafe[id%len(palette.WebSafe)])
+			img.Set(p.X(), p.Y(), palette.WebSafe[id%len(palette.WebSafe)])
 		}
 	}
 	for p, id := range g.points {
-		g.label(img, p.x(), p.y(), strconv.Itoa(id))
+		g.label(img, p.X(), p.Y(), strconv.Itoa(id))
 	}
 	return img
 }
 
-// label draws a label on an image.
-func (g grid) label(img *image.RGBA, x, y int, label string) {
+// label draws text on an image.
+func (g Grid) label(img *image.RGBA, x, y int, label string) {
 	d := &font.Drawer{
 		Dst:  img,
 		Src:  image.NewUniform(color.RGBA{0, 0, 0, 255}),
@@ -125,19 +125,8 @@ func (g grid) label(img *image.RGBA, x, y int, label string) {
 	d.DrawString(label)
 }
 
-func (g grid) copy() grid {
-	h := newGrid()
-	for p, id := range g.points {
-		h.points[p] = id
-	}
-	for p, id := range g.locs {
-		h.locs[p] = id
-	}
-	return h
-}
-
-// max calculates the size of the largest area.
-func (g grid) max(edgePoints map[int]bool) int {
+// Max calculates the size of the largest area.
+func (g Grid) Max(edgePoints map[int]bool) int {
 	areas := map[int]int{}
 	for _, id := range g.locs {
 		if !edgePoints[id] {
