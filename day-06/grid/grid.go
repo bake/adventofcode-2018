@@ -20,15 +20,18 @@ const (
 	fieldEqualDist = -1
 )
 
+// Grid holds XYs.
 type Grid struct {
 	points map[XY]int // points are the base coordinates.
 	locs   map[XY]int // locs are all fields.
 }
 
+// New generates a new grid.
 func New() Grid {
 	return Grid{map[XY]int{}, map[XY]int{}}
 }
 
+// At returns the ID at a given point.
 func (g Grid) At(p XY) int {
 	return g.locs[p]
 }

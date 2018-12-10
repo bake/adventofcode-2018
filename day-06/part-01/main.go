@@ -42,6 +42,7 @@ func main() {
 		g.SetPoint(p, i+1)
 	}
 
+	// Expend until every location inside the grid is filled.
 	total := int(math.Max(float64(maxX-minX), float64(maxY-minY)))
 	for r := 1; r < total; r++ {
 		g.Expand(r)
@@ -50,8 +51,8 @@ func main() {
 	// padding is an arbitrary number to make the plot look a little nicer.
 	padding := 10
 
-	// Find all points that are directly at an edge of the grid. This is not the
-	// a very good solution, but it worls (if expend was called enough times).
+	// Find all points that are directly at an edge of the grid. This is not a
+	// very good solution but it works.
 	b := image.Rect(minX-padding, minY-padding, maxX+padding, maxY+padding)
 	edgePoints := map[int]bool{}
 	for x := b.Min.X; x < b.Max.X; x++ {
