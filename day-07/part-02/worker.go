@@ -11,15 +11,6 @@ type worker struct {
 
 func (w worker) done(done map[rune]bool) bool {
 	return w.node == nil
-	if w.node == nil {
-		return true
-	}
-	for r := range w.node.Ancestors {
-		if !done[r] {
-			return false
-		}
-	}
-	return true
 }
 
 type workers []worker
