@@ -20,12 +20,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// This is unreasonable slow.
 	width, height := 300, 300
+
 	var max, maxX, maxY, maxSize int
+	g := grid.New(width, height, serial)
 	for s := 0; s < width; s++ {
-		g := grid.Grid(serial)
-		x, y, m := g.Max(width, height, s)
+		x, y, m := g.Max(s)
 		if m > max {
 			max, maxX, maxY, maxSize = m, x, y, s
 		}

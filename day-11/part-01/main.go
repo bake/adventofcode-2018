@@ -24,8 +24,8 @@ func main() {
 
 	width, height, size := 300, 300, 3
 
-	g := grid.Grid(serial)
-	x, y, max := g.Max(width, height, size)
+	g := grid.New(width, height, serial)
+	x, y, max := g.Max(size)
 	fmt.Printf("%d,%d\n", x, y)
 
 	img := g.Image(width, height, max)
