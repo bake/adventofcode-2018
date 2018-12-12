@@ -4,12 +4,16 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"math"
 )
 
+// Point holds coordinates an velocity.
 type Point struct{ X, Y, VX, VY int }
 
+// Points is a slice of points.
 type Points []Point
 
+// Image plots points to an image.
 func (pts Points) Image() image.Image {
 	b := pts.Bounds()
 	img := image.NewRGBA(b)
@@ -20,21 +24,23 @@ func (pts Points) Image() image.Image {
 	return img
 }
 
+// Bounds returns a recangle containing all points.
 func (pts Points) Bounds() image.Rectangle {
-	var r image.Rectangle
+	minX, maxX := math.MaxInt32, math.MinInt32
+	minY, maxY := math.MaxInt32, math.MinInt32
 	for _, p := range pts {
-		if p.X < r.Min.X {
-			r.Min.X = p.X
+		if p.X < minX {
+			minX = p.X
 		}
-		if p.X > r.Max.X {
-			r.Max.X = p.X
+		if p.X > maxX {
+			maxX = p.X
 		}
-		if p.Y < r.Min.Y {
-			r.Min.Y = p.Y
+		if p.Y < minY {
+			minY = p.Y
 		}
-		if p.Y > r.Max.Y {
-			r.Max.Y = p.Y
+		if p.Y > maxY {
+			maxY = p.Y
 		}
 	}
-	return r
+	return image.Rect(minX, minY, maxX+1, maxY+1)
 }
