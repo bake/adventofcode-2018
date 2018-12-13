@@ -12,6 +12,9 @@ import (
 
 func main() {
 	b, err := ioutil.ReadFile("../input.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 	body := strings.Fields(string(b))
 	fields := make([]int, len(body))
 	for i, b := range body {

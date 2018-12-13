@@ -21,7 +21,7 @@ func TestParseNode(t *testing.T) {
 			"children and metadata",
 			[]int{1, 1, 0, 1, 99, 2},
 			&tree.Node{
-				Children: []*tree.Node{&tree.Node{Children: nil, Metadata: []int{99}}},
+				Children: []*tree.Node{{Children: nil, Metadata: []int{99}}},
 				Metadata: []int{2},
 			},
 		},

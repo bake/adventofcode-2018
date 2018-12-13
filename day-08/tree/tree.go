@@ -40,7 +40,7 @@ func (n *Node) Metasum() int {
 
 // Value calculates the value of a node. This is done by summing its metadata
 // if it has no child nodes. If a node has children, its metadata refers to
-// ther idices and Value() summs their metadata.
+// their idices and Value() summs their metadata.
 func (n *Node) Value() int {
 	if len(n.Children) == 0 {
 		return n.Metasum()
