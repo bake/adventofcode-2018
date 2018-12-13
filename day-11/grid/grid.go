@@ -21,7 +21,7 @@ func New(w, h, serial int) Grid {
 	return g
 }
 
-// power calculates the power of a grid at a specific postion.
+// power calculates the power of a grid at a specific position.
 func power(x, y, serial int) int {
 	var power int
 	power += x + 10
