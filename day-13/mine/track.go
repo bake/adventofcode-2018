@@ -1,5 +1,10 @@
 package mine
 
+import (
+	"image"
+	"image/color"
+)
+
 // Track contains a map of rails and their carts.
 type Track struct {
 	rails [][]byte
@@ -8,21 +13,6 @@ type Track struct {
 		x, y    int
 		crashed bool
 	}
-}
-
-func (t *Track) String() string {
-	var str string
-	for y := range t.rails {
-		for x := range t.rails[y] {
-			if c, ok := t.CartAt(x, y); ok && !c.Crashed {
-				str += c.String()
-				continue
-			}
-			str += string(t.rails[y][x])
-		}
-		str += "\n"
-	}
-	return str
 }
 
 // CartAt returns the cart at a given position.
@@ -98,6 +88,38 @@ func (t *Track) Alive() int {
 // happend.
 func (t *Track) Crash() (int, int, bool) {
 	return t.crash.x, t.crash.y, t.crash.crashed
+}
+
+func (t *Track) String() string {
+	var str string
+	for y := range t.rails {
+		for x := range t.rails[y] {
+			if c, ok := t.CartAt(x, y); ok && !c.Crashed {
+				str += c.String()
+				continue
+			}
+			str += string(t.rails[y][x])
+		}
+		str += "\n"
+	}
+	return str
+}
+
+func (t *Track) Image() image.Image {
+	w, h := len(t.rails[0]), len(t.rails)
+	img := image.NewRGBA(image.Rect(0, 0, w+2, h+1))
+	for y := range t.rails {
+		for x := range t.rails[y] {
+			if c, ok := t.CartAt(x, y); ok && !c.Crashed {
+				img.Set(x, y, color.RGBA{R: 255, A: 255})
+				continue
+			}
+			if t.rails[y][x] != ' ' {
+				img.Set(x, y, color.White)
+			}
+		}
+	}
+	return img
 }
 
 // Parse parses a slice of slice of bytes into a track. The first slice
