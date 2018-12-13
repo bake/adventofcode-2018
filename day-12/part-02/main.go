@@ -33,7 +33,7 @@ func main() {
 	numGens := 50000000000
 
 	// Expand the pot slice in both directions (even though I know that this
-	// automata only moves to the right). The number by whith the slice expends
+	// automata only moves to the right). The number by which the slice expends
 	// has to be >= the number of evaluated generations. This could happen inside
 	// the loop.
 	expand := 500
@@ -46,9 +46,8 @@ func main() {
 		state = state.Evolve(rules)
 
 		// Evaluate the state until it is the previous one shifted one pot to the
-		// right.
-		// The clarify this, plaese see generations.png. It is a plot of the first
-		// 200 generations.
+		// right. The clarify why this works, plaese see generations.png. It is a
+		// plot of the first 200 generations.
 		if prev.Equal(state[1:]) {
 			break
 		}
