@@ -3,6 +3,7 @@ package mine
 import (
 	"image"
 	"image/color"
+	"image/draw"
 )
 
 // Track contains a map of rails and their carts.
@@ -105,9 +106,11 @@ func (t *Track) String() string {
 	return str
 }
 
+// Image generates an image.
 func (t *Track) Image() image.Image {
 	w, h := len(t.rails[0]), len(t.rails)
 	img := image.NewRGBA(image.Rect(0, 0, w+2, h+1))
+	draw.Draw(img, img.Bounds(), &image.Uniform{color.Black}, image.ZP, draw.Src)
 	for y := range t.rails {
 		for x := range t.rails[y] {
 			if c, ok := t.CartAt(x, y); ok && !c.Crashed {
