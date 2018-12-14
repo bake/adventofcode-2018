@@ -49,13 +49,11 @@ func main() {
 		if score >= 10 {
 			recipes = append(recipes, score/10)
 			if recipes.Suffix(target) {
-				fmt.Println(len(recipes) - len(target))
 				break
 			}
 		}
 		recipes = append(recipes, score%10)
 		if recipes.Suffix(target) {
-			fmt.Println(len(recipes) - len(target))
 			break
 		}
 
@@ -63,4 +61,5 @@ func main() {
 			elfs[i] = (elf + 1 + int(recipes[elf])) % len(recipes)
 		}
 	}
+	fmt.Println(len(recipes) - len(target))
 }
