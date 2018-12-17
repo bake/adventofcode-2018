@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+
+	"github.com/bakerolls/adventofcode-2018/day-16/opcodes"
 )
 
+// Warning, reader! This might be the worst code so far.
 func main() {
 	b, err := ioutil.ReadFile("../input.txt")
 	if err != nil {
@@ -26,11 +29,12 @@ func main() {
 
 func possibilities(s sample) []string {
 	var res []string
-	for opcode, fn := range opcodes {
-		register = make([]uint8, len(s.Before))
-		copy(register, s.Before)
+	for opcode, fn := range opcodes.Opcodes {
+		for i := range opcodes.Register {
+			opcodes.Register[i] = s.Before[i]
+		}
 		fn(s.Instruction[1], s.Instruction[2], s.Instruction[3])
-		if equal(s.After, register) {
+		if opcodes.RegisterEqual(s.After) {
 			res = append(res, opcode)
 		}
 	}
@@ -38,18 +42,9 @@ func possibilities(s sample) []string {
 }
 
 type sample struct {
-	Before      []uint8
-	Instruction []uint8
-	After       []uint8
-}
-
-func equal(a, b []uint8) bool {
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
+	Before      [4]uint8
+	Instruction [4]uint8
+	After       [4]uint8
 }
 
 func parse(b []byte) []sample {
@@ -58,9 +53,6 @@ func parse(b []byte) []sample {
 	for _, b := range bs {
 		rows := bytes.Split(b, []byte("\n"))
 		var s sample
-		s.Before = make([]uint8, 4)
-		s.Instruction = make([]uint8, 4)
-		s.After = make([]uint8, 4)
 		fmt.Sscanf(string(rows[0]), "Before: [%d, %d, %d, %d]", &s.Before[0], &s.Before[1], &s.Before[2], &s.Before[3])
 		fmt.Sscanf(string(rows[1]), "%d %d %d %d", &s.Instruction[0], &s.Instruction[1], &s.Instruction[2], &s.Instruction[3])
 		fmt.Sscanf(string(rows[2]), "After:  [%d, %d, %d, %d]", &s.After[0], &s.After[1], &s.After[2], &s.After[3])
