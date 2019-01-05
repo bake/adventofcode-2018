@@ -4,7 +4,7 @@ package opcodes
 // good.
 var Register [4]int
 
-// OpcodeFunc is a function taht manipulates the Register.
+// OpcodeFunc is a function that manipulates the Register.
 type OpcodeFunc func(a, b, c int)
 
 // Opcodes manipulare the register.
