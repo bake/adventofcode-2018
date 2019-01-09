@@ -1,0 +1,52 @@
+#p 5
+
+0 1 2 3 4 5
+a b c d e p
+
+start:
+ 0 | addi 5 16 5   | p = a + 16 | goto 18
+
+setup3:
+ 1 | seti 1 1 2  | c = 1
+ 2 | seti 1 8 1  | b = 1
+ 3 | mulr 2 1 3  | d = c * b
+ 4 | eqrr 3 4 3  | d = d == e
+ 5 | addr 3 5 5  | p += d
+ 6 | addi 5 1 5  | p += 1
+ 7 | addr 2 0 0  | a += c
+ 8 | addi 1 1 1  | b += 1
+ 9 | gtrr 1 4 3  | d = b > e
+10 | addr 5 3 5  | p += d
+11 | seti 2 6 5  | p = 2
+12 | addi 2 1 2  | c += 1
+13 | gtrr 2 4 3  | d = c > e
+14 | addr 3 5 5  | p += d
+15 | seti 1 2 5  | p = 1
+
+16 | mulr 5 5 5  | p *= p
+
+setup1:
+17 | addi 4 2 4  | e += 2     | e = 2
+18 | mulr 4 4 4  | e *= e     | e = 4
+19 | mulr 5 4 4  | e *= p     | e = 76
+20 | muli 4 11 4 | e *= 11    | e = 836
+
+21 | addi 3 2 3  | d += 2     | d = 2
+22 | mulr 3 5 3  | d *= p     | d = 44
+23 | addi 3 13 3 | d += 13    | d = 57
+
+24 | addr 4 3 4  | e += d     | e = 893
+
+25 | addr 5 0 5  | p += a     | if a == 0 { goto 27 } else { goto 1 }
+26 | seti 0 8 5  | p = 0
+
+setup2:
+27 | setr 5 5 3  | d = p      | d = 27
+28 | mulr 3 5 3  | d *= p     | d = 756
+29 | addr 5 3 3  | d += p     | d = 785
+30 | mulr 5 3 3  | d *= p     | d = 23550
+31 | muli 3 14 3 | d *= 14    | d = 329700
+32 | mulr 3 5 3  | d *= p     | d = 10550400
+33 | addr 4 3 4  | e += d     | e = 10551293
+34 | seti 0 9 0  | a = 0      | a = 0
+35 | seti 0 9 5  | p = 0      | goto 1
