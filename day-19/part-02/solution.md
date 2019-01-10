@@ -17,12 +17,12 @@ do {
 } while (c <= e)
 ```
 
-Written with `for` loops instead of `do..while` to make it look a little more familiar.
+Written with `for` loops instead of `do..while` to make it look a little more familiar:
 
 ```javascript
 const e = 10551293
 for (let c = 1; c <= e; c++) {
-	for (let a = 1; b <= e; b++) {
+	for (let b = 1; b <= e; b++) {
 		if (c * b == e) {
 			a += c
 		}
@@ -30,7 +30,7 @@ for (let c = 1; c <= e; c++) {
 }
 ```
 
-The goal here is to see that it's just prime factorization of `e` (10551293). The puzzles solution is the sum of all factors from (0, e].
+The goal here is to see that it's just prime factorization of `e` (10551293). The puzzles solution is the sum of all factors in (0, e].
 
 ```
 1 + 53 + 199081 + 10551293 = 10750428
