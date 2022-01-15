@@ -1,5 +1,8 @@
 # Advent of Code 2018
 
+[← 2016 (PHP)](https://github.com/bake/adventofcode-2016) —
+[2019 (Go) →](https://github.com/bake/adventofcode-2019)
+
 Solutions for [Advent of Code 2018](https://adventofcode.com/2018/) written in Go.
 
 ## Some interesting Plots
